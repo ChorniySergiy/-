@@ -21,7 +21,7 @@ void PhoneBook::addContact()
 	std::cout << "Enter Phone Number: ";
 	std::cin >> phonenum;
 	std::cout << "Enter Contact Info: ";
-	std::cin.ignore();  // Игнорируем символ новой строки
+	std::cin.ignore();  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 	std::cin.getline(contactinfo, 100);
 	Contact contact(name, surname, patronymic, homenum, worknum, phonenum, contactinfo);
 	contacts.push_back(contact);
@@ -91,34 +91,27 @@ void PhoneBook::findContact()
 
 void PhoneBook::saveContacts(const char* filename)
 {
-	setlocale(LC_ALL, "");
-	std::ofstream outputFile(filename, std::ios::out);
-	
-	try
-	{
-		if (!outputFile) {
-			throw std::runtime_error("Error while opening file");
-		}
+    setlocale(LC_ALL, "");
+    std::ofstream outputFile(filename, std::ios::out);
 
-		for (Contact& contact : contacts)
-		{
-			outputFile << contact.getName() << '\n'
-				<< contact.getSurname() << '\n'
-				<< contact.getPatronymic() << '\n'
-				<< contact.getHomenumber() << '\n'
-				<< contact.getWorknumber() << '\n'
-				<< contact.getPhonenumber() << '\n'
-				<< contact.getContactinfo() << '\n';
-		}
-		outputFile.close();
-	}
-	catch (const std::exception& e)
-	{
-		std::cerr << "Error: " << e.what() << std::endl; 
-	}
+    if (!outputFile.is_open()) {
+        throw std::runtime_error("Error while opening file");
+    }
 
-	
+    for (const Contact& contact : contacts) 
+    {
+        outputFile << contact.getName() << '\n'
+                   << contact.getSurname() << '\n'
+                   << contact.getPatronymic() << '\n'
+                   << contact.getHomenumber() << '\n'
+                   << contact.getWorknumber() << '\n'
+                   << contact.getPhonenumber() << '\n'
+                   << contact.getContactinfo() << '\n';
+    }
+    
+    outputFile.close();
 }
+
 
 void PhoneBook::loadContacts(const char* filename)
 {

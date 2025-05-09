@@ -35,18 +35,20 @@ int main()
 				pb.findContact(); 
 				system("pause"); 
 				break; 
+				
 			case 5: 
 				try
 				{
 					pb.saveContacts("Contacts.txt");
-					std::cout << "Saving successfully" << std::endl; 
-					system("pause"); 
+					std::cout << "Saving successfully" << std::endl;
 				}
-				catch(std::runtime_error& e)
+				catch (const std::exception& e)
 				{
-					std::cout << "Error: " << e.what() << std::endl; 
+					std::cerr << "Error: " << e.what() << std::endl;
 				}
-				break; 
+				system("pause");
+				break;
+			
 			case 6: 
 				pb.loadContacts("Contacts.txt"); 
 				std::cout << "Loading successfully" << std::endl;
