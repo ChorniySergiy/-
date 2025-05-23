@@ -1,72 +1,91 @@
-// Получение списка записей
-const URL = 'http://127.0.0.1:8000/'
-fetch(URL + 'clean/records/list')
-  .then(response => response.json())
-  .then(data => {
-    console.log(data);
-    const recordsList = document.getElementById('records-list');
-    let records_html = '';
-    
-    data.forEach(record => {
-        records_html += `
-        <div>
-          <h2>${record.name}</h2>
-          <p>${record.comment}</p>
-          <p>${record.address}</p>
-          <button onclick="deleteRecord(${record.id})">Удалить</button>
-        </div>
-      `;
-    });
-    recordsList.innerHTML = records_html;
+const URL = 'http://127.0.0.1:8000/';
 
-  })
-  .catch(error => console.error('Ошибка при получении списка записей:', error));
+// Завантаження списку записів
+function loadRecords() {
+  fetch(URL + 'clean/records/list')
+    .then(response => response.json())
+    .then(data => {
+      const recordsList = document.getElementById('records-list');
+      let html = '';
 
+      data.forEach(record => {
+        html += `
+          <div>
+            <h2>${record.name}</h2>
+            <p>${record.comment}</p>
+            <p>${record.address}</p>
+            <button onclick="deleteRecord(${record.id})">Видалити</button>
+          </div>
+        `;
+      });
 
-fetch(URL+'clean/services/list')
-.then(response => response.json())
-.then(data => {
-    const serviceSelect = document.getElementById('service_id');
-    data.forEach(service => {
-      const option = document.createElement('option');
-      option.value = service.id;
-      option.text = service.title;
-      serviceSelect.appendChild(option);
-    });
-  })
-  .catch(error => console.error('Ошибка при получении списка услуг:', error));
-
-function createRecord(e) {
-    e.preventDefault()
-    const formData = new FormData(document.getElementById('create-record-form'));
-    fetch(URL+'clean/records/create', {
-      method: 'POST',
-      body: formData
-    }).then(response => {
-
-        console.log('Статус ответа:', response.status);
-        if (!response.ok) {
-          throw new Error('Error');
-        }
-        return response.json();
-      }).then(data => 
-
-        console.log('Запись создана:', data)
-
-    ).catch(error => console.error('Ошибка при создании записи:', error));
-}
-function deleteRecord(id) {
-    fetch(URL + `clean/records/delete/${id}`, {
-      method: 'DELETE'
+      recordsList.innerHTML = html;
     })
-    .then(response => {
+    .catch(error => console.error('Помилка при отриманні списку записів:', error));
+}
 
-        console.log('Статус ответа:', response.status);
-        if (!response.ok) {
-          throw new Error('Error');
-        }
-        return response.json();
-      })
-    .then(data => console.log('Запись удалена:', data))
-    .catch(error => console.error('Ошибка при удалении записи:', error));
-  }
+// Завантаження послуг
+function loadServices() {
+  fetch(URL + 'clean/services/list')
+    .then(response => response.json())
+    .then(data => {
+      const serviceSelect = document.getElementById('service_id');
+      data.forEach(service => {
+        const option = document.createElement('option');
+        option.value = service.id;
+        option.text = service.title;
+        serviceSelect.appendChild(option);
+      });
+    })
+    .catch(error => console.error('Помилка при отриманні списку послуг:', error));
+}
+
+// Створення нового запису
+function createRecord(e) {
+  e.preventDefault();
+
+  const form = document.getElementById('create-record-form');
+  const formData = new FormData(form);
+
+  fetch(URL + 'clean/records/create', {
+    method: 'POST',
+    body: formData
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Помилка при створенні запису');
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log('Запис створено:', data);
+      form.reset();       // Очистити форму
+      loadRecords();      // Оновити список
+    })
+    .catch(error => console.error(error.message));
+}
+
+// Видалення запису
+function deleteRecord(id) {
+  fetch(URL + `clean/records/delete/${id}`, {
+    method: 'DELETE'
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Помилка при видаленні запису');
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log('Запис видалено:', data);
+      loadRecords(); // Оновити список після видалення
+    })
+    .catch(error => console.error(error.message));
+}
+
+// Ініціалізація після завантаження сторінки
+document.addEventListener('DOMContentLoaded', () => {
+  loadRecords();
+  loadServices();
+  document.getElementById('create-record-form').addEventListener('submit', createRecord);
+});

@@ -1,4 +1,4 @@
-#records-list{
+#records-list {
     border: 1px solid black;
     display: flex;
     flex-wrap: wrap;
@@ -6,9 +6,9 @@
     justify-content: space-around;
     padding: 20px;
 }
-h1{
+h1 {
     text-align: center;
 }
-form{
+form {
     text-align: center;
 }
