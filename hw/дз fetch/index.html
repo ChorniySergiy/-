@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Records List</h1>
+    <div id="records-list"></div>
+    
+    <h1>Create Record</h1>
+    <form id="create-record-form" onsubmit="createRecord()">
+        <label for="name">Имя:</label>
+        <input type="text" id="name" name="name"><br><br>
+        <label for="comment">Комментарий:</label>
+        <textarea id="comment" name="comment"></textarea><br><br>
+        <label for="address">Адрес:</label>
+        <input type="text" id="address" name="address"><br><br>
+        <label for="service_id">Услуга:</label>
+        <select id="service_id" name="service_id"></select><br><br>
+        <button>Создать</button>
+      </form>
+
+    <script src="script.js"></script>
+</body>
+</html>
